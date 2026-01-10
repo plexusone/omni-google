@@ -1,8 +1,11 @@
 # OmniStorage Google
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/grokify/omnistorage-google.svg)](https://pkg.go.dev/github.com/grokify/omnistorage-google)
-[![Go Report Card](https://goreportcard.com/badge/github.com/grokify/omnistorage-google)](https://goreportcard.com/report/github.com/grokify/omnistorage-google)
-[![CI](https://github.com/grokify/omnistorage-google/actions/workflows/ci.yml/badge.svg)](https://github.com/grokify/omnistorage-google/actions/workflows/ci.yml)
+[![Build Status][build-status-svg]][build-status-url]
+[![Lint Status][lint-status-svg]][lint-status-url]
+[![Go Report Card][goreport-svg]][goreport-url]
+[![Docs][docs-godoc-svg]][docs-godoc-url]
+[![Visualization][viz-svg]][viz-url]
+[![License][license-svg]][license-url]
 
 Google Cloud backends for [OmniStorage](https://github.com/grokify/omnistorage) - Google Drive and Google Cloud Storage (GCS).
 
@@ -238,3 +241,18 @@ gcsBackend, _ := omnistorage.Open("gcs", map[string]string{
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
+
+ [build-status-svg]: https://github.com/grokify/omnistorage-google/actions/workflows/ci.yaml/badge.svg?branch=main
+ [build-status-url]: https://github.com/grokify/omnistorage-google/actions/workflows/ci.yaml
+ [lint-status-svg]: https://github.com/grokify/omnistorage-google/actions/workflows/lint.yaml/badge.svg?branch=main
+ [lint-status-url]: https://github.com/grokify/omnistorage-google/actions/workflows/lint.yaml
+ [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/omnistorage-google
+ [goreport-url]: https://goreportcard.com/report/github.com/grokify/omnistorage-google
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/omnistorage-google
+ [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/omnistorage-google
+ [viz-svg]: https://img.shields.io/badge/visualizaton-Go-blue.svg
+ [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=grokify%2Fomnistorage-google
+ [loc-svg]: https://tokei.rs/b1/github/grokify/omnistorage-google
+ [repo-url]: https://github.com/grokify/omnistorage-google
+ [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
+ [license-url]: https://github.com/grokify/omnistorage-google/blob/master/LICENSE

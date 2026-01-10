@@ -699,12 +699,12 @@ func escapeQuery(s string) string {
 
 // offsetReader wraps a reader to skip offset bytes and limit reading.
 type offsetReader struct {
-	r         io.ReadCloser
-	offset    int64
-	limit     int64
-	skipped   int64
-	read      int64
-	skipDone  bool
+	r        io.ReadCloser
+	offset   int64
+	limit    int64
+	skipped  int64
+	read     int64
+	skipDone bool
 }
 
 func (r *offsetReader) Read(p []byte) (n int, err error) {
@@ -836,11 +836,11 @@ type objectInfo struct {
 	md5         string
 }
 
-func (o *objectInfo) Path() string               { return o.path }
-func (o *objectInfo) Size() int64                { return o.size }
-func (o *objectInfo) ModTime() time.Time         { return o.modTime }
-func (o *objectInfo) IsDir() bool                { return o.isDir }
-func (o *objectInfo) ContentType() string        { return o.contentType }
+func (o *objectInfo) Path() string        { return o.path }
+func (o *objectInfo) Size() int64         { return o.size }
+func (o *objectInfo) ModTime() time.Time  { return o.modTime }
+func (o *objectInfo) IsDir() bool         { return o.isDir }
+func (o *objectInfo) ContentType() string { return o.contentType }
 func (o *objectInfo) Hash(t omnistorage.HashType) string {
 	if t == omnistorage.HashMD5 {
 		return o.md5

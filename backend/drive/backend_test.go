@@ -771,10 +771,10 @@ func TestInvalidateCache(t *testing.T) {
 	backend := &Backend{
 		config: Config{RootFolderID: "root"},
 		pathCache: map[string]string{
-			"file.txt":           "id1",
-			"dir/file.txt":       "id2",
+			"file.txt":            "id1",
+			"dir/file.txt":        "id2",
 			"dir/subdir/file.txt": "id3",
-			"other/file.txt":     "id4",
+			"other/file.txt":      "id4",
 		},
 	}
 

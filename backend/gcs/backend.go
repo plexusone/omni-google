@@ -20,11 +20,13 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"os"
 	"path"
 	"strings"
 	"sync"
 
 	"cloud.google.com/go/storage"
+	"golang.org/x/oauth2/google"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 
@@ -60,11 +62,24 @@ func New(cfg Config) (*Backend, error) {
 	// Build client options
 	var opts []option.ClientOption
 
-	// Credentials
+	// Credentials - use google.CredentialsFromJSON for explicit credentials
+	// to avoid deprecated WithCredentialsJSON/WithCredentialsFile functions
 	if len(cfg.CredentialsJSON) > 0 {
-		opts = append(opts, option.WithCredentialsJSON(cfg.CredentialsJSON))
+		creds, err := google.CredentialsFromJSON(ctx, cfg.CredentialsJSON, storage.ScopeFullControl)
+		if err != nil {
+			return nil, fmt.Errorf("gcs: parsing credentials JSON: %w", err)
+		}
+		opts = append(opts, option.WithCredentials(creds))
 	} else if cfg.CredentialsFile != "" {
-		opts = append(opts, option.WithCredentialsFile(cfg.CredentialsFile))
+		data, err := os.ReadFile(cfg.CredentialsFile)
+		if err != nil {
+			return nil, fmt.Errorf("gcs: reading credentials file: %w", err)
+		}
+		creds, err := google.CredentialsFromJSON(ctx, data, storage.ScopeFullControl)
+		if err != nil {
+			return nil, fmt.Errorf("gcs: parsing credentials file: %w", err)
+		}
+		opts = append(opts, option.WithCredentials(creds))
 	}
 	// If no credentials specified, the client will use Application Default Credentials
 
@@ -145,14 +160,14 @@ func (b *Backend) NewReader(ctx context.Context, p string, opts ...omnistorage.R
 		}
 		r, err := obj.NewRangeReader(ctx, cfg.Offset, length)
 		if err != nil {
-			return nil, b.translateError(err, p)
+			return nil, b.translateError(err)
 		}
 		return r, nil
 	}
 
 	r, err := obj.NewReader(ctx)
 	if err != nil {
-		return nil, b.translateError(err, p)
+		return nil, b.translateError(err)
 	}
 	return r, nil
 }
@@ -175,7 +190,7 @@ func (b *Backend) Exists(ctx context.Context, p string) (bool, error) {
 		if errors.Is(err, storage.ErrObjectNotExist) {
 			return false, nil
 		}
-		return false, b.translateError(err, p)
+		return false, b.translateError(err)
 	}
 
 	return true, nil
@@ -200,7 +215,7 @@ func (b *Backend) Delete(ctx context.Context, p string) error {
 		if errors.Is(err, storage.ErrObjectNotExist) {
 			return nil
 		}
-		return b.translateError(err, p)
+		return b.translateError(err)
 	}
 
 	return nil
@@ -273,7 +288,7 @@ func (b *Backend) Stat(ctx context.Context, p string) (omnistorage.ObjectInfo, e
 
 	attrs, err := obj.Attrs(ctx)
 	if err != nil {
-		return nil, b.translateError(err, p)
+		return nil, b.translateError(err)
 	}
 
 	// Build hash map
@@ -370,7 +385,7 @@ func (b *Backend) Rmdir(ctx context.Context, p string) error {
 	obj := b.bucket.Object(objPath)
 	if err := obj.Delete(ctx); err != nil {
 		if !errors.Is(err, storage.ErrObjectNotExist) {
-			return b.translateError(err, p)
+			return b.translateError(err)
 		}
 	}
 
@@ -397,7 +412,7 @@ func (b *Backend) Copy(ctx context.Context, src, dst string) error {
 	copier := dstObj.CopierFrom(srcObj)
 	_, err := copier.Run(ctx)
 	if err != nil {
-		return b.translateError(err, src)
+		return b.translateError(err)
 	}
 
 	return nil
@@ -459,7 +474,7 @@ func (b *Backend) checkClosed() error {
 }
 
 // translateError converts GCS errors to omnistorage errors.
-func (b *Backend) translateError(err error, path string) error {
+func (b *Backend) translateError(err error) error {
 	if err == nil {
 		return nil
 	}

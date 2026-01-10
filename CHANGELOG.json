@@ -1,0 +1,42 @@
+{
+  "ir_version": "1.0",
+  "project": "omnistorage-google",
+  "repository": "https://github.com/grokify/omnistorage-google",
+  "versioning": "semver",
+  "commit_convention": "conventional",
+  "releases": [
+    {
+      "version": "0.1.0",
+      "date": "2026-01-10",
+      "highlights": [
+        { "description": "Initial release with Google Drive and Google Cloud Storage backends for OmniStorage" }
+      ],
+      "added": [
+        { "description": "Google Drive backend (`backend/drive`) with full `ExtendedBackend` implementation" },
+        { "description": "Google Cloud Storage backend (`backend/gcs`) with full `ExtendedBackend` implementation" },
+        { "description": "Service account authentication for both backends" },
+        { "description": "OAuth2 user credentials support for Google Drive" },
+        { "description": "Application Default Credentials support for GCS" },
+        { "description": "Server-side copy for both backends" },
+        { "description": "Server-side move for Google Drive, copy+delete for GCS" },
+        { "description": "Path-to-ID resolution with caching for Google Drive" },
+        { "description": "Shared Drive (Team Drive) support for Google Drive" },
+        { "description": "MD5 hash support for both backends" },
+        { "description": "CRC32C hash support for GCS" },
+        { "description": "Range read support for both backends" },
+        { "description": "Resumable uploads with configurable chunk size" },
+        { "description": "Backend registry integration (`gdrive` and `gcs` names)" },
+        { "description": "Configuration from environment variables" },
+        { "description": "Configuration from string maps for flexibility" }
+      ],
+      "documentation": [
+        { "description": "README.md with usage examples and configuration reference" },
+        { "description": "GoDoc comments on all public APIs" }
+      ],
+      "tests": [
+        { "description": "Unit tests for configuration parsing" },
+        { "description": "Unit tests for backend operations" }
+      ]
+    }
+  ]
+}

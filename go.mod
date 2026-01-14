@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/storage v1.59.0
 	github.com/grokify/omnistorage v0.1.0
 	golang.org/x/oauth2 v0.34.0
-	google.golang.org/api v0.259.0
+	google.golang.org/api v0.260.0
 )
 
 require (

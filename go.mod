@@ -3,7 +3,7 @@ module github.com/grokify/omnistorage-google
 go 1.24.0
 
 require (
-	cloud.google.com/go/storage v1.59.0
+	cloud.google.com/go/storage v1.59.2
 	github.com/grokify/omnistorage v0.1.0
 	golang.org/x/oauth2 v0.34.0
 	google.golang.org/api v0.259.0

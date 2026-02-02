@@ -1,4 +1,4 @@
-# OmniStorage Google
+# OmniStorage Google Provider
 
 [![Build Status][build-status-svg]][build-status-url]
 [![Lint Status][lint-status-svg]][lint-status-url]

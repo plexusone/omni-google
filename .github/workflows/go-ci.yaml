@@ -1,4 +1,4 @@
-name: CI
+name: Go CI
 permissions:
   contents: read
 on:
@@ -6,32 +6,28 @@ on:
     branches:
       - main
     paths:
-      - 'omnillm/**'
-      - 'omnistorage/**'
-      - '.github/workflows/ci.yaml'
+      - 'omnillm/**.go'
+      - 'omnillm/go.mod'
+      - 'omnillm/go.sum'
+      - 'omnistorage/**.go'
+      - 'omnistorage/go.mod'
+      - 'omnistorage/go.sum'
+      - '.github/workflows/go-ci.yaml'
   pull_request:
     branches:
       - main
     paths:
-      - 'omnillm/**'
-      - 'omnistorage/**'
-      - '.github/workflows/ci.yaml'
+      - 'omnillm/**.go'
+      - 'omnillm/go.mod'
+      - 'omnillm/go.sum'
+      - 'omnistorage/**.go'
+      - 'omnistorage/go.mod'
+      - 'omnistorage/go.sum'
+      - '.github/workflows/go-ci.yaml'
   workflow_dispatch:
+
 jobs:
-  test:
-    strategy:
-      matrix:
-        go-version: [1.26.x, 1.25.x]
-        platform: [ubuntu-latest, macos-latest, windows-latest]
-        module: [omnillm, omnistorage]
-    runs-on: ${{ matrix.platform }}
-    steps:
-    - name: Install Go
-      uses: actions/setup-go@v6
-      with:
-        go-version: ${{ matrix.go-version }}
-    - name: Checkout code
-      uses: actions/checkout@v6
-    - name: Run tests
-      working-directory: ${{ matrix.module }}
-      run: go test -v -covermode=count ./...
+  ci:
+    uses: plexusone/.github/.github/workflows/go-ci.yaml@main
+    with:
+      modules: '["omnillm", "omnistorage"]'

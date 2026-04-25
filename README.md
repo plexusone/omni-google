@@ -1,28 +1,27 @@
-# OmniStorage Google Provider
+# omni-google
 
 [![Build Status][build-status-svg]][build-status-url]
 [![Lint Status][lint-status-svg]][lint-status-url]
 [![Go Report Card][goreport-svg]][goreport-url]
 [![Docs][docs-godoc-svg]][docs-godoc-url]
-[![Visualization][viz-svg]][viz-url]
 [![License][license-svg]][license-url]
 
-Google Cloud backends for [OmniStorage](https://github.com/grokify/omnistorage) - Google Drive and Google Cloud Storage (GCS).
+Google Cloud backends for [omnistorage-core](https://github.com/plexusone/omnistorage-core) - Google Drive and Google Cloud Storage (GCS).
 
 This package is separate from the core OmniStorage module to keep dependencies minimal. Import only what you need.
 
 ## Installation
 
 ```bash
-go get github.com/grokify/omnistorage-google
+go get github.com/plexusone/omni-google/omnistorage
 ```
 
 ## Backends
 
 | Backend | Package | Description |
 |---------|---------|-------------|
-| Google Drive | `backend/drive` | Google Drive API with OAuth2 and service account auth |
-| Google Cloud Storage | `backend/gcs` | GCS with Application Default Credentials |
+| Google Drive | `omnistorage/backend/drive` | Google Drive API with OAuth2 and service account auth |
+| Google Cloud Storage | `omnistorage/backend/gcs` | GCS with Application Default Credentials |
 
 Both backends implement `omnistorage.ExtendedBackend` with full support for:
 
@@ -39,7 +38,7 @@ Both backends implement `omnistorage.ExtendedBackend` with full support for:
 ```go
 import (
     "context"
-    "github.com/grokify/omnistorage-google/backend/drive"
+    "github.com/plexusone/omni-google/omnistorage/backend/drive"
 )
 
 func main() {
@@ -109,7 +108,7 @@ backend, err := drive.New(cfg)
 ```go
 import (
     "context"
-    "github.com/grokify/omnistorage-google/backend/gcs"
+    "github.com/plexusone/omni-google/omnistorage/backend/gcs"
 )
 
 func main() {
@@ -175,9 +174,9 @@ Backends register themselves automatically when imported:
 
 ```go
 import (
-    "github.com/grokify/omnistorage"
-    _ "github.com/grokify/omnistorage-google/backend/drive"
-    _ "github.com/grokify/omnistorage-google/backend/gcs"
+    omnistorage "github.com/plexusone/omnistorage-core/object"
+    _ "github.com/plexusone/omni-google/omnistorage/backend/drive"
+    _ "github.com/plexusone/omni-google/omnistorage/backend/gcs"
 )
 
 // Open Google Drive
@@ -232,27 +231,23 @@ gcsBackend, _ := omnistorage.Open("gcs", map[string]string{
    - Create a service account with Storage permissions
    - Download the JSON key file
 
-## Related
+## Related Projects
 
-- [OmniStorage](https://github.com/grokify/omnistorage) - Core library
-- [Google Drive API](https://developers.google.com/drive/api/v3/about-sdk)
-- [Google Cloud Storage](https://cloud.google.com/storage/docs)
+- [omnistorage-core](https://github.com/plexusone/omnistorage-core) - Core storage abstraction library
+- [omni-aws](https://github.com/plexusone/omni-aws) - AWS S3 and Bedrock providers
+- [omni-github](https://github.com/plexusone/omni-github) - GitHub repository backend
 
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
 
- [build-status-svg]: https://github.com/grokify/omnistorage-google/actions/workflows/ci.yaml/badge.svg?branch=main
- [build-status-url]: https://github.com/grokify/omnistorage-google/actions/workflows/ci.yaml
- [lint-status-svg]: https://github.com/grokify/omnistorage-google/actions/workflows/lint.yaml/badge.svg?branch=main
- [lint-status-url]: https://github.com/grokify/omnistorage-google/actions/workflows/lint.yaml
- [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/omnistorage-google
- [goreport-url]: https://goreportcard.com/report/github.com/grokify/omnistorage-google
- [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/omnistorage-google
- [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/omnistorage-google
- [viz-svg]: https://img.shields.io/badge/visualizaton-Go-blue.svg
- [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=grokify%2Fomnistorage-google
- [loc-svg]: https://tokei.rs/b1/github/grokify/omnistorage-google
- [repo-url]: https://github.com/grokify/omnistorage-google
+ [build-status-svg]: https://github.com/plexusone/omni-google/actions/workflows/ci.yaml/badge.svg?branch=main
+ [build-status-url]: https://github.com/plexusone/omni-google/actions/workflows/ci.yaml
+ [lint-status-svg]: https://github.com/plexusone/omni-google/actions/workflows/lint.yaml/badge.svg?branch=main
+ [lint-status-url]: https://github.com/plexusone/omni-google/actions/workflows/lint.yaml
+ [goreport-svg]: https://goreportcard.com/badge/github.com/plexusone/omni-google
+ [goreport-url]: https://goreportcard.com/report/github.com/plexusone/omni-google
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/plexusone/omni-google/omnistorage
+ [docs-godoc-url]: https://pkg.go.dev/github.com/plexusone/omni-google/omnistorage
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
- [license-url]: https://github.com/grokify/omnistorage-google/blob/master/LICENSE
+ [license-url]: https://github.com/plexusone/omni-google/blob/main/LICENSE

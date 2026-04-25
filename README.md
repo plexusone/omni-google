@@ -3,20 +3,92 @@
 [![Build Status][build-status-svg]][build-status-url]
 [![Lint Status][lint-status-svg]][lint-status-url]
 [![Go Report Card][goreport-svg]][goreport-url]
-[![Docs][docs-godoc-svg]][docs-godoc-url]
 [![License][license-svg]][license-url]
 
-Google Cloud backends for [omnistorage-core](https://github.com/plexusone/omnistorage-core) - Google Drive and Google Cloud Storage (GCS).
+Google Cloud providers for the OmniStorage and OmniLLM ecosystems.
 
-This package is separate from the core OmniStorage module to keep dependencies minimal. Import only what you need.
+## Modules
+
+| Module | Package | Description |
+|--------|---------|-------------|
+| **omnillm** | `github.com/plexusone/omni-google/omnillm` | Gemini LLM provider for [omnillm-core](https://github.com/plexusone/omnillm-core) |
+| **omnistorage** | `github.com/plexusone/omni-google/omnistorage` | GCS and Drive backends for [omnistorage-core](https://github.com/plexusone/omnistorage-core) |
 
 ## Installation
 
 ```bash
+# For Gemini LLM provider
+go get github.com/plexusone/omni-google/omnillm
+
+# For storage backends (GCS, Drive)
 go get github.com/plexusone/omni-google/omnistorage
 ```
 
-## Backends
+---
+
+## OmniLLM - Gemini Provider
+
+The `omnillm` module provides a Gemini provider for [omnillm-core](https://github.com/plexusone/omnillm-core).
+
+### Quick Start
+
+```go
+import (
+    "context"
+    "os"
+
+    "github.com/plexusone/omni-google/omnillm"
+)
+
+func main() {
+    ctx := context.Background()
+
+    // Create provider with API key
+    provider := gemini.NewProvider(os.Getenv("GEMINI_API_KEY"))
+
+    // Create a chat completion
+    resp, err := provider.CreateChatCompletion(ctx, &provider.ChatCompletionRequest{
+        Model: "gemini-2.0-flash",
+        Messages: []provider.Message{
+            {Role: "user", Content: "Hello, Gemini!"},
+        },
+    })
+    if err != nil {
+        panic(err)
+    }
+
+    fmt.Println(resp.Choices[0].Message.Content)
+}
+```
+
+### Using the Registry
+
+```go
+import (
+    omnillm "github.com/plexusone/omnillm-core"
+    _ "github.com/plexusone/omni-google/omnillm" // Register Gemini provider
+)
+
+provider, err := omnillm.NewProvider(omnillm.ProviderConfig{
+    Provider: omnillm.ProviderNameGemini,
+    APIKey:   os.Getenv("GEMINI_API_KEY"),
+})
+```
+
+### Supported Features
+
+- ✅ Chat completions
+- ✅ Streaming responses
+- ✅ System prompts
+- ✅ Multi-turn conversations
+
+---
+
+## OmniStorage - GCS and Drive Backends
+
+The `omnistorage` module provides Google Cloud Storage and Google Drive backends.
+
+### Storage Backends
 
 | Backend | Package | Description |
 |---------|---------|-------------|
@@ -25,15 +97,13 @@ go get github.com/plexusone/omni-google/omnistorage
 
 Both backends implement `omnistorage.ExtendedBackend` with full support for:
 
-- Read/Write operations
-- Stat, Copy, Move
-- Mkdir, Rmdir
-- Server-side copy
-- Hash support (MD5, CRC32C for GCS)
+- 📄 Read/Write operations
+- ℹ️ Stat, Copy, Move
+- 📂 Mkdir, Rmdir
+- ⚡ Server-side copy
+- 🔐 Hash support (MD5, CRC32C for GCS)
 
-## Google Drive Backend
-
-### With Service Account
+### Google Drive Backend
 
 ```go
 import (
@@ -57,53 +127,10 @@ func main() {
     w, _ := backend.NewWriter(ctx, "docs/hello.txt")
     w.Write([]byte("Hello from Drive!"))
     w.Close()
-
-    // Read it back
-    r, _ := backend.NewReader(ctx, "docs/hello.txt")
-    data, _ := io.ReadAll(r)
-    r.Close()
 }
 ```
 
-### With OAuth2 User Credentials
-
-```go
-backend, err := drive.New(drive.Config{
-    CredentialsFile: "/path/to/oauth-client.json",
-    TokenFile:       "/path/to/token.json",
-    RootFolderID:    "your-folder-id",
-})
-```
-
-### Configuration Options
-
-| Option | Description |
-|--------|-------------|
-| `RootFolderID` | Folder ID to use as root (default: "root" for My Drive) |
-| `CredentialsFile` | Path to service account or OAuth2 client JSON |
-| `CredentialsJSON` | Raw JSON credentials (alternative to file) |
-| `TokenFile` | Path to OAuth2 token file (for user credentials) |
-| `Token` | Existing OAuth2 token |
-| `SharedDrive` | Enable Shared Drive (Team Drive) support |
-| `ChunkSize` | Resumable upload chunk size (default: 8MB) |
-
-### Environment Variables
-
-```bash
-export OMNISTORAGE_GDRIVE_ROOT_FOLDER_ID="folder-id"
-export OMNISTORAGE_GDRIVE_CREDENTIALS_FILE="/path/to/creds.json"
-export OMNISTORAGE_GDRIVE_TOKEN_FILE="/path/to/token.json"
-export OMNISTORAGE_GDRIVE_SHARED_DRIVE="true"
-```
-
-```go
-cfg := drive.ConfigFromEnv()
-backend, err := drive.New(cfg)
-```
-
-## Google Cloud Storage Backend
-
-### With Application Default Credentials
+### Google Cloud Storage Backend
 
 ```go
 import (
@@ -126,51 +153,10 @@ func main() {
     w, _ := backend.NewWriter(ctx, "data/hello.txt")
     w.Write([]byte("Hello from GCS!"))
     w.Close()
-
-    // Read it back
-    r, _ := backend.NewReader(ctx, "data/hello.txt")
-    data, _ := io.ReadAll(r)
-    r.Close()
 }
 ```
 
-### With Service Account
-
-```go
-backend, err := gcs.New(gcs.Config{
-    Bucket:          "my-bucket",
-    CredentialsFile: "/path/to/service-account.json",
-})
-```
-
-### Configuration Options
-
-| Option | Description |
-|--------|-------------|
-| `Bucket` | GCS bucket name (required) |
-| `Project` | Google Cloud project ID |
-| `Prefix` | Object path prefix |
-| `CredentialsFile` | Path to service account JSON |
-| `CredentialsJSON` | Raw JSON credentials |
-| `ChunkSize` | Resumable upload chunk size (default: 16MB) |
-| `Concurrency` | Concurrent operations (default: 5) |
-
-### Environment Variables
-
-```bash
-export OMNISTORAGE_GCS_BUCKET="my-bucket"
-export GOOGLE_APPLICATION_CREDENTIALS="/path/to/creds.json"
-export OMNISTORAGE_GCS_PREFIX="data/"
-```
-
-```go
-cfg := gcs.ConfigFromEnv()
-backend, err := gcs.New(cfg)
-```
-
-## Using the Registry
-
-Backends register themselves automatically when imported:
+### Using the Storage Registry
 
 ```go
 import (
@@ -191,7 +177,7 @@ gcsBackend, _ := omnistorage.Open("gcs", map[string]string{
 })
 ```
 
-## Features Comparison
+### Features Comparison
 
 | Feature | Google Drive | GCS |
 |---------|--------------|-----|
@@ -206,7 +192,17 @@ gcsBackend, _ := omnistorage.Open("gcs", map[string]string{
 | Versioning | No | Yes (bucket config) |
 | Shared Drives | Yes | N/A |
 
+---
+
 ## Authentication
+
+### Gemini API
+
+Set your API key:
+
+```bash
+export GEMINI_API_KEY="your-api-key"
+```
 
 ### Google Drive
 
@@ -218,7 +214,6 @@ gcsBackend, _ := omnistorage.Open("gcs", map[string]string{
 2. **OAuth2 User Credentials** (for user-facing apps):
    - Create OAuth2 client credentials
    - Implement OAuth2 flow to get user token
-   - Store token for reuse
 
 ### Google Cloud Storage
 
@@ -233,8 +228,9 @@ gcsBackend, _ := omnistorage.Open("gcs", map[string]string{
 
 ## Related Projects
 
+- [omnillm-core](https://github.com/plexusone/omnillm-core) - Core LLM abstraction library
 - [omnistorage-core](https://github.com/plexusone/omnistorage-core) - Core storage abstraction library
-- [omni-aws](https://github.com/plexusone/omni-aws) - AWS S3 and Bedrock providers
+- [omni-aws](https://github.com/plexusone/omni-aws) - AWS Bedrock and S3 providers
 - [omni-github](https://github.com/plexusone/omni-github) - GitHub repository backend
 
 ## License
@@ -247,7 +243,5 @@ MIT License - see [LICENSE](LICENSE) for details.
  [lint-status-url]: https://github.com/plexusone/omni-google/actions/workflows/lint.yaml
  [goreport-svg]: https://goreportcard.com/badge/github.com/plexusone/omni-google
  [goreport-url]: https://goreportcard.com/report/github.com/plexusone/omni-google
- [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/plexusone/omni-google/omnistorage
- [docs-godoc-url]: https://pkg.go.dev/github.com/plexusone/omni-google/omnistorage
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
  [license-url]: https://github.com/plexusone/omni-google/blob/main/LICENSE

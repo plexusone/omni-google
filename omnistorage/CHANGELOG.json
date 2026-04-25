@@ -1,12 +1,12 @@
 {
-  "ir_version": "1.0",
-  "project": "omnistorage-google",
-  "repository": "https://github.com/grokify/omnistorage-google",
+  "irVersion": "1.0",
+  "project": "omni-google/omnistorage",
+  "repository": "https://github.com/plexusone/omni-google",
   "versioning": "semver",
-  "commit_convention": "conventional",
+  "commitConvention": "conventional",
   "releases": [
     {
-      "version": "0.1.0",
+      "version": "v0.1.0",
       "date": "2026-01-10",
       "highlights": [
         { "description": "Initial release with Google Drive and Google Cloud Storage backends for OmniStorage" }

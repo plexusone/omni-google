@@ -1,0 +1,71 @@
+{
+  "irVersion": "1.0",
+  "project": "omni-google",
+  "repository": "https://github.com/plexusone/omni-google",
+  "versioning": "semver",
+  "commitConvention": "conventional",
+  "releases": [
+    {
+      "version": "v0.3.0",
+      "date": "2026-04-25",
+      "highlights": [
+        { "description": "Consolidated to single Go module at repository root" },
+        { "description": "Unified Google provider package with both LLM (Gemini) and Storage (GCS, Drive) adapters" }
+      ],
+      "breaking": [
+        { "description": "Module path changed from `github.com/plexusone/omni-google/omnillm` to `github.com/plexusone/omni-google`" },
+        { "description": "Module path changed from `github.com/plexusone/omni-google/omnistorage` to `github.com/plexusone/omni-google`" }
+      ],
+      "upgradeGuide": [
+        { "description": "Import paths remain the same: `github.com/plexusone/omni-google/omnillm` and `github.com/plexusone/omni-google/omnistorage`" },
+        { "description": "Run `go get github.com/plexusone/omni-google@v0.3.0` to update dependency" }
+      ],
+      "changed": [
+        { "description": "Removed nested `omnillm/go.mod` and `omnistorage/go.mod` in favor of root-level `go.mod`" },
+        { "description": "Consolidated changelogs from per-module to single repository changelog" },
+        { "description": "Simplified CI workflows (removed multi-module configuration)" }
+      ],
+      "internal": [
+        { "description": "Previous releases: `omnillm/v0.2.0` (Gemini adapter), `omnistorage/v0.2.0` (GCS/Drive adapters)" }
+      ]
+    },
+    {
+      "version": "v0.2.0",
+      "date": "2026-04-25",
+      "highlights": [
+        { "description": "[omnillm] Migration from standalone `omnillm-gemini` repository" },
+        { "description": "[omnistorage] Migration from `grokify/omnistorage-google` to `plexusone/omni-google`" }
+      ],
+      "breaking": [
+        { "description": "[omnillm] Module path changed from `github.com/plexusone/omnillm-gemini` to `github.com/plexusone/omni-google/omnillm`", "commit": "aa081b1" },
+        { "description": "[omnistorage] Module path changed from `github.com/grokify/omnistorage-google` to `github.com/plexusone/omni-google/omnistorage`", "commit": "a92f9ed" }
+      ],
+      "fixed": [
+        { "description": "[omnillm] Remove redundant nil check in client.go (S1009)", "commit": "a4b4f31" },
+        { "description": "[omnistorage] Add nolint directives for G101 and SA1019 false positives", "commit": "a4b4f31" }
+      ]
+    },
+    {
+      "version": "v0.1.0",
+      "date": "2026-04-12",
+      "highlights": [
+        { "description": "[omnillm] Initial release of Google Gemini thick provider for OmniLLM" },
+        { "description": "[omnistorage] Initial release with Google Drive and GCS backends (2026-01-10)" }
+      ],
+      "added": [
+        { "description": "[omnillm] Gemini SDK client wrapper with streaming support", "commit": "e8d95ab" },
+        { "description": "[omnillm] Provider adapter with registry integration", "commit": "be630d7" },
+        { "description": "[omnistorage] Google Drive backend with full `ExtendedBackend` implementation", "commit": "849d907" },
+        { "description": "[omnistorage] Google Cloud Storage backend with full `ExtendedBackend` implementation", "commit": "adb5b96" },
+        { "description": "[omnistorage] Service account and OAuth2 authentication", "commit": "849d907" },
+        { "description": "[omnistorage] Server-side copy/move, range reads, resumable uploads", "commit": "849d907" }
+      ],
+      "dependencies": [
+        { "description": "[omnillm] `google.golang.org/genai` v1.52.1", "commit": "090ee14" },
+        { "description": "[omnillm] `github.com/plexusone/omnillm-core` v0.15.0", "commit": "ec9cd66" },
+        { "description": "[omnistorage] `cloud.google.com/go/storage`", "commit": "adb5b96" },
+        { "description": "[omnistorage] `github.com/plexusone/omnistorage-core` v0.3.0", "commit": "849d907" }
+      ]
+    }
+  ]
+}

@@ -47,10 +47,10 @@
     },
     {
       "version": "v0.1.0",
-      "date": "2026-04-12",
+      "date": "2026-01-10",
       "highlights": [
-        { "description": "[omnillm] Initial release of Google Gemini thick provider for OmniLLM" },
-        { "description": "[omnistorage] Initial release with Google Drive and GCS backends (2026-01-10)" }
+        { "description": "[omnistorage] Initial release with Google Drive and GCS backends" },
+        { "description": "[omnillm] Initial release of Google Gemini thick provider for OmniLLM (2026-04-12)" }
       ],
       "added": [
         { "description": "[omnillm] Gemini SDK client wrapper with streaming support", "commit": "e8d95ab" },

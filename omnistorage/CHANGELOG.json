@@ -6,6 +6,29 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.2.0",
+      "date": "2026-04-25",
+      "highlights": [
+        { "description": "Migration from `grokify/omnistorage-google` to `plexusone/omni-google` organization" },
+        { "description": "Restructured as nested module in multi-module repository" }
+      ],
+      "changed": [
+        { "description": "Module path changed from `github.com/grokify/omnistorage-google` to `github.com/plexusone/omni-google/omnistorage`", "commit": "a92f9ed", "breaking": true },
+        { "description": "Backends moved to `omnistorage/backend/` subdirectory", "commit": "a92f9ed", "breaking": true }
+      ],
+      "fixed": [
+        { "description": "Add nolint directives for G101 false positives in test fixtures", "commit": "a4b4f31" },
+        { "description": "Add nolint directives for SA1019 deprecated google.CredentialsFromJSON", "commit": "a4b4f31" }
+      ],
+      "documentation": [
+        { "description": "Move documentation to module directory", "commit": "e4cd46d" },
+        { "description": "Update changelog for omni-google repository", "commit": "2b9fb38" }
+      ],
+      "internal": [
+        { "description": "Add nested Go module for multi-module repository", "commit": "39eb323" }
+      ]
+    },
+    {
       "version": "v0.1.0",
       "date": "2026-01-10",
       "highlights": [

@@ -1,0 +1,38 @@
+{
+  "irVersion": "1.0",
+  "project": "omni-google/omnillm",
+  "repository": "https://github.com/plexusone/omni-google",
+  "versioning": "semver",
+  "commitConvention": "conventional",
+  "releases": [
+    {
+      "version": "v0.1.0",
+      "date": "2026-04-12",
+      "highlights": [
+        { "description": "Initial release of Google Gemini thick provider for OmniLLM" },
+        { "description": "Full chat completion and streaming support using official genai SDK" }
+      ],
+      "added": [
+        { "description": "Gemini SDK client wrapper", "commit": "e8d95ab" },
+        { "description": "Provider adapter with registry integration", "commit": "be630d7" },
+        { "description": "Auto-registration via `init()` with priority override", "commit": "be630d7" },
+        { "description": "Streaming support via `CreateChatCompletionStream`", "commit": "e8d95ab" },
+        { "description": "Conformance tests using `providertest` framework", "commit": "64e9b52" }
+      ],
+      "documentation": [
+        { "description": "Package documentation with usage examples", "commit": "4ccd302" },
+        { "description": "README with feature support table", "commit": "054a15f" },
+        { "description": "Release notes for v0.1.0", "commit": "e3af0ce" }
+      ],
+      "dependencies": [
+        { "description": "`google.golang.org/genai` v1.52.1", "commit": "090ee14" },
+        { "description": "`github.com/plexusone/omnillm-core` v0.15.0", "commit": "ec9cd66" }
+      ],
+      "internal": [
+        { "description": "Initialize module", "commit": "090ee14" },
+        { "description": "Add shared CI workflows", "commit": "75fd9bd" },
+        { "description": "Add LICENSE file", "commit": "ac31410" }
+      ]
+    }
+  ]
+}

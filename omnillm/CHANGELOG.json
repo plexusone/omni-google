@@ -6,6 +6,25 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.2.0",
+      "date": "2026-04-25",
+      "highlights": [
+        { "description": "Migration from standalone `omnillm-gemini` repository to `omni-google/omnillm`" }
+      ],
+      "changed": [
+        { "description": "Module path changed from `github.com/plexusone/omnillm-gemini` to `github.com/plexusone/omni-google/omnillm`", "commit": "aa081b1", "breaking": true }
+      ],
+      "fixed": [
+        { "description": "Remove redundant nil check in client.go (S1009)", "commit": "a4b4f31" }
+      ],
+      "documentation": [
+        { "description": "Add per-module documentation (README, CHANGELOG, RELEASE_NOTES)", "commit": "6e93e87" }
+      ],
+      "internal": [
+        { "description": "Add nested Go module for multi-module repository", "commit": "8dcb721" }
+      ]
+    },
+    {
       "version": "v0.1.0",
       "date": "2026-04-12",
       "highlights": [

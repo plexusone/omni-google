@@ -1,6 +1,10 @@
 version: 2
 updates:
 - package-ecosystem: gomod
+  directory: /omnillm
+  schedule:
+    interval: daily
+- package-ecosystem: gomod
   directory: /omnistorage
   schedule:
     interval: daily

@@ -4,12 +4,14 @@ on:
     branches:
       - main
     paths:
+      - 'omnillm/**'
       - 'omnistorage/**'
       - '.github/workflows/lint.yaml'
   pull_request:
     branches:
       - main
     paths:
+      - 'omnillm/**'
       - 'omnistorage/**'
       - '.github/workflows/lint.yaml'
   workflow_dispatch:
@@ -17,6 +19,9 @@ permissions:
   contents: read
 jobs:
   lint:
+    strategy:
+      matrix:
+        module: [omnillm, omnistorage]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
@@ -29,4 +34,4 @@ jobs:
       with:
         version: latest
         args: --timeout 3m --verbose
-        working-directory: omnistorage
+        working-directory: ${{ matrix.module }}

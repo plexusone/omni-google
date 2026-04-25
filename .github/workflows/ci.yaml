@@ -6,12 +6,14 @@ on:
     branches:
       - main
     paths:
+      - 'omnillm/**'
       - 'omnistorage/**'
       - '.github/workflows/ci.yaml'
   pull_request:
     branches:
       - main
     paths:
+      - 'omnillm/**'
       - 'omnistorage/**'
       - '.github/workflows/ci.yaml'
   workflow_dispatch:
@@ -21,6 +23,7 @@ jobs:
       matrix:
         go-version: [1.26.x, 1.25.x]
         platform: [ubuntu-latest, macos-latest, windows-latest]
+        module: [omnillm, omnistorage]
     runs-on: ${{ matrix.platform }}
     steps:
     - name: Install Go
@@ -30,5 +33,5 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v6
     - name: Run tests
-      working-directory: omnistorage
+      working-directory: ${{ matrix.module }}
       run: go test -v -covermode=count ./...

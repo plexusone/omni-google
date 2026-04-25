@@ -45,6 +45,7 @@ func TestConfigValidate(t *testing.T) {
 		},
 		{
 			name: "valid with all fields",
+			//nolint:gosec // G101: test fixture, not real credentials
 			config: Config{
 				Bucket:          "my-bucket",
 				Project:         "my-project",
@@ -83,6 +84,7 @@ func TestConfigFromMap(t *testing.T) {
 		},
 		{
 			name: "all fields",
+			//nolint:gosec // G101: test fixture, not real credentials
 			input: map[string]string{
 				"bucket":           "test-bucket",
 				"project":          "test-project",
@@ -92,6 +94,7 @@ func TestConfigFromMap(t *testing.T) {
 				"chunk_size":       "8388608",
 				"concurrency":      "10",
 			},
+			//nolint:gosec // G101: test fixture, not real credentials
 			expected: Config{
 				Bucket:          "test-bucket",
 				Project:         "test-project",

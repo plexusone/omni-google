@@ -65,6 +65,7 @@ func New(cfg Config) (*Backend, error) {
 	// Credentials - use google.CredentialsFromJSON for explicit credentials
 	// to avoid deprecated WithCredentialsJSON/WithCredentialsFile functions
 	if len(cfg.CredentialsJSON) > 0 {
+		//nolint:staticcheck // SA1019: credentials source is controlled by application config
 		creds, err := google.CredentialsFromJSON(ctx, cfg.CredentialsJSON, storage.ScopeFullControl)
 		if err != nil {
 			return nil, fmt.Errorf("gcs: parsing credentials JSON: %w", err)
@@ -75,6 +76,7 @@ func New(cfg Config) (*Backend, error) {
 		if err != nil {
 			return nil, fmt.Errorf("gcs: reading credentials file: %w", err)
 		}
+		//nolint:staticcheck // SA1019: credentials source is controlled by application config
 		creds, err := google.CredentialsFromJSON(ctx, data, storage.ScopeFullControl)
 		if err != nil {
 			return nil, fmt.Errorf("gcs: parsing credentials file: %w", err)

@@ -92,7 +92,7 @@ func (c *Client) CreateCompletion(ctx context.Context, req *Request) (*Response,
 		Model:   req.Model,
 	}
 
-	if response.Candidates != nil && len(response.Candidates) > 0 {
+	if len(response.Candidates) > 0 {
 		candidate := response.Candidates[0]
 		content := ""
 

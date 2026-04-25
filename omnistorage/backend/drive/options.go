@@ -140,6 +140,7 @@ func (c *Config) createDriveService(ctx context.Context) (*drive.Service, error)
 	}
 
 	// Try to parse as service account first
+	//nolint:staticcheck // SA1019: credentials source is controlled by application config
 	if creds, err := google.CredentialsFromJSON(ctx, credJSON, scopes...); err == nil {
 		// Check if it's a service account by looking at the type field
 		var credType struct {

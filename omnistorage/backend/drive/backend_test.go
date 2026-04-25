@@ -51,6 +51,7 @@ func TestConfigValidate(t *testing.T) {
 		},
 		{
 			name: "valid with credentials file",
+			//nolint:gosec // G101: test fixture, not real credentials
 			config: Config{
 				CredentialsFile: "/path/to/creds.json",
 			},
@@ -65,6 +66,7 @@ func TestConfigValidate(t *testing.T) {
 		},
 		{
 			name: "invalid chunk size",
+			//nolint:gosec // G101: test fixture, not real credentials
 			config: Config{
 				CredentialsFile: "/path/to/creds.json",
 				ChunkSize:       1000, // Not a multiple of 256KB
@@ -73,6 +75,7 @@ func TestConfigValidate(t *testing.T) {
 		},
 		{
 			name: "valid chunk size",
+			//nolint:gosec // G101: test fixture, not real credentials
 			config: Config{
 				CredentialsFile: "/path/to/creds.json",
 				ChunkSize:       256 * 1024, // 256KB
@@ -106,6 +109,7 @@ func TestDefaultConfig(t *testing.T) {
 }
 
 func TestConfigFromMap(t *testing.T) {
+	//nolint:gosec // G101: test fixture, not real credentials
 	m := map[string]string{
 		"root_folder_id":   "folder123",
 		"credentials_file": "/path/to/creds.json",

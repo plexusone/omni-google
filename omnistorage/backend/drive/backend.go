@@ -34,7 +34,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/grokify/omnistorage"
+	omnistorage "github.com/plexusone/omnistorage-core/object"
 	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/googleapi"
 )

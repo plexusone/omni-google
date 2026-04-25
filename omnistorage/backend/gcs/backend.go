@@ -30,7 +30,7 @@ import (
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 
-	"github.com/grokify/omnistorage"
+	omnistorage "github.com/plexusone/omnistorage-core/object"
 )
 
 func init() {

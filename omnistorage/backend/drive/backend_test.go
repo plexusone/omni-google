@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/grokify/omnistorage"
+	omnistorage "github.com/plexusone/omnistorage-core/object"
 )
 
 // Integration tests require these environment variables:

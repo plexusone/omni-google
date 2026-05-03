@@ -6,6 +6,21 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.4.0",
+      "date": "2026-05-03",
+      "highlights": [
+        { "description": "Gmail provider for omnichat integration" }
+      ],
+      "added": [
+        { "description": "[omnichat] Gmail provider using `gogoogle/gmailutil` for sending emails via Gmail API" }
+      ],
+      "dependencies": [
+        { "description": "[omnichat] `github.com/grokify/goauth` v0.23.29" },
+        { "description": "[omnichat] `github.com/grokify/gogoogle` v0.9.0" },
+        { "description": "[omnichat] `github.com/plexusone/omnichat` v0.6.0 (provider interface)" }
+      ]
+    },
+    {
       "version": "v0.3.0",
       "date": "2026-04-25",
       "highlights": [

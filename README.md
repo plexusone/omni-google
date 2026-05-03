@@ -27,7 +27,7 @@
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
  [license-url]: https://github.com/plexusone/omni-google/blob/main/LICENSE
 
-Google Cloud providers for the OmniStorage and OmniLLM ecosystems.
+Google Cloud providers for the OmniStorage, OmniLLM, and OmniChat ecosystems.
 
 ## Modules
 
@@ -35,6 +35,7 @@ Google Cloud providers for the OmniStorage and OmniLLM ecosystems.
 |--------|---------|-------------|
 | **omnillm** | `github.com/plexusone/omni-google/omnillm` | Gemini LLM provider for [omnillm-core](https://github.com/plexusone/omnillm-core) |
 | **omnistorage** | `github.com/plexusone/omni-google/omnistorage` | GCS and Drive backends for [omnistorage-core](https://github.com/plexusone/omnistorage-core) |
+| **omnichat** | `github.com/plexusone/omni-google/omnichat/gmail` | Gmail provider for [omnichat](https://github.com/plexusone/omnichat) |
 
 ## Installation
 
@@ -44,6 +45,9 @@ go get github.com/plexusone/omni-google/omnillm
 
 # For storage backends (GCS, Drive)
 go get github.com/plexusone/omni-google/omnistorage
+
+# For Gmail messaging provider
+go get github.com/plexusone/omni-google/omnichat/gmail
 ```
 
 ---
@@ -216,6 +220,92 @@ gcsBackend, _ := omnistorage.Open("gcs", map[string]string{
 
 ---
 
+## OmniChat - Gmail Provider
+
+The `omnichat/gmail` module provides a Gmail provider for [omnichat](https://github.com/plexusone/omnichat).
+
+### Quick Start
+
+```go
+import (
+    "context"
+    "log/slog"
+    "os"
+
+    "github.com/plexusone/omni-google/omnichat/gmail"
+)
+
+func main() {
+    ctx := context.Background()
+
+    // Load credentials from file
+    creds, _ := os.ReadFile("client_secret.json")
+
+    // Create Gmail provider
+    provider, err := gmail.New(
+        gmail.WithCredentialsJSON(creds),
+        gmail.WithFromAddress("me"),
+        gmail.WithLogger(slog.Default()),
+    )
+    if err != nil {
+        panic(err)
+    }
+
+    // Connect (will prompt OAuth flow on first run)
+    if err := provider.Connect(ctx); err != nil {
+        panic(err)
+    }
+    defer provider.Disconnect(ctx)
+
+    // Send an email
+    err = provider.SendEmail(ctx,
+        "recipient@example.com",
+        "Hello from OmniChat",
+        "This email was sent via Gmail API!",
+        false, // plain text
+    )
+}
+```
+
+### Using with OmniChat Router
+
+```go
+import (
+    "github.com/plexusone/omnichat/provider"
+    "github.com/plexusone/omni-google/omnichat/gmail"
+)
+
+router := provider.NewRouter(logger)
+
+gmailProvider, _ := gmail.New(
+    gmail.WithCredentialsJSON(creds),
+    gmail.WithFromAddress("me"),
+    gmail.WithLogger(logger),
+)
+
+router.Register(gmailProvider)
+router.ConnectAll(ctx)
+
+// Send email via router
+router.Send(ctx, "gmail", "recipient@example.com", provider.OutgoingMessage{
+    Content: "Hello from OmniChat!",
+    Format:  provider.MessageFormatPlain,
+    Metadata: map[string]any{
+        "subject": "Test Email",
+    },
+})
+```
+
+### Gmail Authentication
+
+1. Create OAuth2 credentials in Google Cloud Console
+2. Enable Gmail API for your project
+3. Download `client_secret.json`
+4. On first run, OAuth flow opens browser for authorization
+5. Token is cached to `~/.omnichat/gmail_token.json`
+
+---
+
 ## Authentication
 
 ### Gemini API
@@ -252,7 +342,8 @@ export GEMINI_API_KEY="your-api-key"
 
 - [omnillm-core](https://github.com/plexusone/omnillm-core) - Core LLM abstraction library
 - [omnistorage-core](https://github.com/plexusone/omnistorage-core) - Core storage abstraction library
-- [omni-aws](https://github.com/plexusone/omni-aws) - AWS Bedrock and S3 providers
+- [omnichat](https://github.com/plexusone/omnichat) - Unified messaging platform interface
+- [omni-aws](https://github.com/plexusone/omni-aws) - AWS Bedrock, S3, and Secrets Manager providers
 - [omni-github](https://github.com/plexusone/omni-github) - GitHub repository backend
 
 ## License

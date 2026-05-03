@@ -5,7 +5,6 @@ go 1.26.0
 require (
 	// omnistorage dependencies
 	cloud.google.com/go/storage v1.62.1
-
 	// omnichat dependencies
 	github.com/grokify/goauth v0.23.29
 	github.com/grokify/gogoogle v0.9.0

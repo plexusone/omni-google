@@ -20,16 +20,16 @@ import (
     "context"
     "os"
 
-    "github.com/plexusone/omni-google/omnivoice"
+    "github.com/plexusone/omni-google/omnivoice/realtime"
 )
 
 func main() {
     ctx := context.Background()
 
     // Create client
-    client, err := omnivoice.NewLiveClient(os.Getenv("GOOGLE_API_KEY"),
-        omnivoice.WithVoice("Puck"),
-        omnivoice.WithInstructions("You are a helpful assistant."),
+    client, err := realtime.NewLiveClient(os.Getenv("GOOGLE_API_KEY"),
+        realtime.WithVoice("Puck"),
+        realtime.WithInstructions("You are a helpful assistant."),
     )
     if err != nil {
         log.Fatal(err)
@@ -52,7 +52,7 @@ func main() {
     // Receive events
     for event := range session.Events() {
         switch e := event.(type) {
-        case *omnivoice.ServerContent:
+        case *realtime.ServerContent:
             for _, part := range e.ModelTurn.Parts {
                 if part.InlineData != nil {
                     // Decode and play audio (PCM16 24kHz)
@@ -63,7 +63,7 @@ func main() {
                     log.Printf("Assistant: %s", part.Text)
                 }
             }
-        case *omnivoice.ToolCall:
+        case *realtime.ToolCall:
             // Handle function calls
             handleToolCall(session, e)
         }
@@ -76,18 +76,18 @@ func main() {
 For a higher-level interface compatible with OmniVoice patterns:
 
 ```go
-import "github.com/plexusone/omni-google/omnivoice"
+import "github.com/plexusone/omni-google/omnivoice/realtime"
 
 // Create provider
-provider := omnivoice.NewRealtimeProvider(os.Getenv("GOOGLE_API_KEY"),
-    omnivoice.WithVoice("Puck"),
-    omnivoice.WithInstructions("You are a helpful assistant."),
+provider := realtime.NewRealtimeProvider(os.Getenv("GOOGLE_API_KEY"),
+    realtime.WithVoice("Puck"),
+    realtime.WithInstructions("You are a helpful assistant."),
 )
 
 // Stream audio
 audioIn := make(chan []byte, 100)
-audioCh, transcriptCh, err := provider.ProcessAudioStream(ctx, audioIn, omnivoice.ProcessConfig{
-    Functions: []omnivoice.FunctionDeclaration{
+audioCh, transcriptCh, err := provider.ProcessAudioStream(ctx, audioIn, realtime.ProcessConfig{
+    Functions: []realtime.FunctionDeclaration{
         {
             Name:        "get_weather",
             Description: "Get current weather",
@@ -110,31 +110,31 @@ audioCh, transcriptCh, err := provider.ProcessAudioStream(ctx, audioIn, omnivoic
 ### Client Options
 
 ```go
-client, err := omnivoice.NewLiveClient(apiKey,
+client, err := realtime.NewLiveClient(apiKey,
     // Voice selection
-    omnivoice.WithVoice("Puck"),
+    realtime.WithVoice("Puck"),
 
     // System instructions
-    omnivoice.WithInstructions("You are a customer service agent."),
+    realtime.WithInstructions("You are a customer service agent."),
 
     // Model selection (default: gemini-2.0-flash-live)
-    omnivoice.WithModel("gemini-2.0-flash-live"),
+    realtime.WithModel("gemini-2.0-flash-live"),
 
     // Response modalities
-    omnivoice.WithResponseModalities("TEXT", "AUDIO"),
+    realtime.WithResponseModalities("TEXT", "AUDIO"),
 
     // Temperature
-    omnivoice.WithTemperature(0.7),
+    realtime.WithTemperature(0.7),
 
     // Enable Google Search
-    omnivoice.WithGoogleSearch(true),
+    realtime.WithGoogleSearch(),
 
     // Enable code execution
-    omnivoice.WithCodeExecution(true),
+    realtime.WithCodeExecution(),
 
     // Custom functions
-    omnivoice.WithFunctions(
-        omnivoice.FunctionDeclaration{
+    realtime.WithFunctions(
+        realtime.FunctionDeclaration{
             Name:        "lookup_order",
             Description: "Look up an order by ID",
             Parameters: map[string]any{
@@ -181,7 +181,7 @@ Handle function calls during the conversation:
 ```go
 for event := range session.Events() {
     switch e := event.(type) {
-    case *omnivoice.ToolCall:
+    case *realtime.ToolCall:
         for _, fc := range e.FunctionCalls {
             // Process the function call
             var result any
@@ -232,7 +232,7 @@ session.Interrupt()
 // Handle interruption events
 for event := range session.Events() {
     switch e := event.(type) {
-    case *omnivoice.ServerContent:
+    case *realtime.ServerContent:
         if e.Interrupted {
             log.Println("Turn was interrupted")
         }

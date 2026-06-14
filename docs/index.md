@@ -9,7 +9,7 @@ Google Cloud providers for the PlexusOne ecosystem.
 | **omnillm** | Gemini LLM provider for OmniLLM | `github.com/plexusone/omni-google/omnillm` |
 | **omnistorage** | GCS and Drive backends for OmniStorage | `github.com/plexusone/omni-google/omnistorage` |
 | **omnichat** | Gmail provider for OmniChat | `github.com/plexusone/omni-google/omnichat/gmail` |
-| **omnivoice** | Gemini Live API for real-time voice | `github.com/plexusone/omni-google/omnivoice` |
+| **omnivoice** | Gemini Live API for real-time voice | `github.com/plexusone/omni-google/omnivoice/realtime` |
 
 ## Installation
 
@@ -62,11 +62,11 @@ provider, err := gmail.New(
 ### OmniVoice (Gemini Live)
 
 ```go
-import "github.com/plexusone/omni-google/omnivoice"
+import "github.com/plexusone/omni-google/omnivoice/realtime"
 
-provider := omnivoice.NewRealtimeProvider(os.Getenv("GEMINI_API_KEY"),
-    omnivoice.WithVoice("Puck"),
-    omnivoice.WithInstructions("You are a helpful assistant."),
+provider := realtime.NewRealtimeProvider(os.Getenv("GEMINI_API_KEY"),
+    realtime.WithVoice("Puck"),
+    realtime.WithInstructions("You are a helpful assistant."),
 )
 
 audioIn := make(chan []byte, 100)

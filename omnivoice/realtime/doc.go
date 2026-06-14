@@ -1,8 +1,11 @@
-// Package omnivoice provides a client for the Gemini Live API.
+// Package realtime provides a client for the Gemini Live API.
 //
 // The Gemini Live API enables real-time, multimodal conversational experiences
 // with Gemini models. It supports bidirectional streaming of audio and text
 // with built-in voice activity detection and interruption handling.
+//
+// This package implements the [github.com/plexusone/omnivoice-core/realtime.Provider]
+// interface for unified voice-to-voice processing.
 //
 // # Features
 //
@@ -19,9 +22,11 @@
 //
 // # Usage
 //
-//	client, err := omnivoice.NewLiveClient(apiKey,
-//	    omnivoice.WithModel("gemini-2.0-flash-live"),
-//	    omnivoice.WithVoice("Puck"),
+//	import "github.com/plexusone/omni-google/omnivoice/realtime"
+//
+//	client, err := realtime.NewLiveClient(apiKey,
+//	    realtime.WithModel("gemini-2.0-flash-live"),
+//	    realtime.WithVoice("Puck"),
 //	)
 //	if err != nil {
 //	    log.Fatal(err)
@@ -39,10 +44,10 @@
 //	// Receive events
 //	for event := range session.Events() {
 //	    switch e := event.(type) {
-//	    case *omnivoice.AudioData:
-//	        // Handle audio output
-//	    case *omnivoice.TextData:
-//	        // Handle text
+//	    case *realtime.ServerContent:
+//	        // Handle audio/text output
+//	    case *realtime.ToolCall:
+//	        // Handle function calls
 //	    }
 //	}
 //
@@ -50,4 +55,4 @@
 //
 //   - Gemini Live API: https://ai.google.dev/gemini-api/docs/live
 //   - API Reference: https://ai.google.dev/api/multimodal-live
-package omnivoice
+package realtime

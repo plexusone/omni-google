@@ -1,4 +1,4 @@
-package omnivoice
+package realtime
 
 import (
 	"encoding/json"

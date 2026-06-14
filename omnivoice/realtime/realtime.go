@@ -1,53 +1,22 @@
-package omnivoice
+package realtime
 
 import (
 	"context"
 	"encoding/base64"
 	"sync"
+
+	corereal "github.com/plexusone/omnivoice-core/realtime"
 )
 
-// AudioChunk represents a chunk of audio data.
-type AudioChunk struct {
-	// Audio is the raw audio data (PCM16 24kHz mono).
-	Audio []byte
-
-	// IsFinal indicates this is the last chunk for a turn.
-	IsFinal bool
-}
-
-// Transcript represents a transcript update.
-type Transcript struct {
-	// Text is the transcript text.
-	Text string
-
-	// IsFinal indicates this is a final transcript.
-	IsFinal bool
-
-	// IsInput indicates this is input (user) transcription.
-	IsInput bool
-}
-
-// ProcessConfig configures audio processing.
-type ProcessConfig struct {
-	// Instructions is the system prompt.
-	Instructions string
-
-	// Voice is the voice for output.
-	Voice string
-
-	// Functions are functions the model can call.
-	Functions []FunctionDeclaration
-
-	// OnFunctionCall is called when the model calls a function.
-	// Return the function output as any JSON-serializable value.
-	OnFunctionCall func(id, name string, args string) (any, error)
-}
-
-// RealtimeProvider provides native voice-to-voice processing.
+// RealtimeProvider provides native voice-to-voice processing via Gemini Live API.
+// It implements the [corereal.Provider] interface.
 type RealtimeProvider struct {
 	apiKey string
 	config Config
 }
+
+// Ensure RealtimeProvider implements corereal.Provider.
+var _ corereal.Provider = (*RealtimeProvider)(nil)
 
 // NewRealtimeProvider creates a new RealtimeProvider.
 func NewRealtimeProvider(apiKey string, opts ...Option) *RealtimeProvider {
@@ -64,11 +33,12 @@ func NewRealtimeProvider(apiKey string, opts ...Option) *RealtimeProvider {
 }
 
 // ProcessAudioStream processes audio input and returns audio output.
+// Implements [corereal.Provider].
 func (p *RealtimeProvider) ProcessAudioStream(
 	ctx context.Context,
 	audioIn <-chan []byte,
-	config ProcessConfig,
-) (<-chan AudioChunk, <-chan Transcript, error) {
+	config corereal.ProcessConfig,
+) (<-chan corereal.AudioChunk, <-chan corereal.Transcript, error) {
 	// Apply config overrides
 	opts := []Option{}
 	if config.Instructions != "" {
@@ -78,7 +48,16 @@ func (p *RealtimeProvider) ProcessAudioStream(
 		opts = append(opts, WithVoice(config.Voice))
 	}
 	if len(config.Functions) > 0 {
-		opts = append(opts, WithFunctions(config.Functions...))
+		// Convert corereal.FunctionDeclaration to local FunctionDeclaration
+		funcs := make([]FunctionDeclaration, len(config.Functions))
+		for i, f := range config.Functions {
+			funcs[i] = FunctionDeclaration{
+				Name:        f.Name,
+				Description: f.Description,
+				Parameters:  f.Parameters,
+			}
+		}
+		opts = append(opts, WithFunctions(funcs...))
 	}
 
 	// Create client with overrides
@@ -92,8 +71,8 @@ func (p *RealtimeProvider) ProcessAudioStream(
 		return nil, nil, err
 	}
 
-	audioCh := make(chan AudioChunk, 100)
-	transcriptCh := make(chan Transcript, 100)
+	audioCh := make(chan corereal.AudioChunk, 100)
+	transcriptCh := make(chan corereal.Transcript, 100)
 
 	var wg sync.WaitGroup
 	wg.Add(2)
@@ -162,8 +141,8 @@ func (p *RealtimeProvider) ProcessAudioStream(
 func (p *RealtimeProvider) handleServerContent(
 	ctx context.Context,
 	content *ServerContent,
-	audioCh chan<- AudioChunk,
-	transcriptCh chan<- Transcript,
+	audioCh chan<- corereal.AudioChunk,
+	transcriptCh chan<- corereal.Transcript,
 ) {
 	if content.ModelTurn == nil {
 		return
@@ -175,7 +154,7 @@ func (p *RealtimeProvider) handleServerContent(
 			audio, err := base64.StdEncoding.DecodeString(part.InlineData.Data)
 			if err == nil && len(audio) > 0 {
 				select {
-				case audioCh <- AudioChunk{Audio: audio}:
+				case audioCh <- corereal.AudioChunk{Audio: audio}:
 				case <-ctx.Done():
 					return
 				}
@@ -185,7 +164,7 @@ func (p *RealtimeProvider) handleServerContent(
 		// Handle text
 		if part.Text != "" {
 			select {
-			case transcriptCh <- Transcript{Text: part.Text, IsInput: false}:
+			case transcriptCh <- corereal.Transcript{Text: part.Text, IsInput: false}:
 			case <-ctx.Done():
 				return
 			}
@@ -195,12 +174,12 @@ func (p *RealtimeProvider) handleServerContent(
 	// Send final marker if turn is complete
 	if content.TurnComplete {
 		select {
-		case audioCh <- AudioChunk{IsFinal: true}:
+		case audioCh <- corereal.AudioChunk{IsFinal: true}:
 		case <-ctx.Done():
 			return
 		}
 		select {
-		case transcriptCh <- Transcript{IsFinal: true}:
+		case transcriptCh <- corereal.Transcript{IsFinal: true}:
 		case <-ctx.Done():
 			return
 		}
@@ -208,6 +187,14 @@ func (p *RealtimeProvider) handleServerContent(
 }
 
 // Name returns the provider name.
+// Implements [corereal.Provider].
 func (p *RealtimeProvider) Name() string {
 	return "gemini-live"
+}
+
+// Close releases any resources held by the provider.
+// Implements [corereal.Provider].
+func (p *RealtimeProvider) Close() error {
+	// No persistent resources to clean up
+	return nil
 }

@@ -2,38 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://plexusone.github.io/omni-google/</loc>
-         <lastmod>2026-05-03</lastmod>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-google/omnichat/</loc>
-         <lastmod>2026-05-03</lastmod>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-google/omnillm/</loc>
-         <lastmod>2026-05-03</lastmod>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-google/omnistorage/</loc>
-         <lastmod>2026-05-03</lastmod>
+         <lastmod>2026-06-14</lastmod>
+    </url>
+    <url>
+         <loc>https://plexusone.github.io/omni-google/omnivoice/</loc>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-google/releases/</loc>
-         <lastmod>2026-05-03</lastmod>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-google/releases/v0.1.0/</loc>
-         <lastmod>2026-05-03</lastmod>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-google/releases/v0.2.0/</loc>
-         <lastmod>2026-05-03</lastmod>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-google/releases/v0.3.0/</loc>
-         <lastmod>2026-05-03</lastmod>
+         <lastmod>2026-06-14</lastmod>
     </url>
     <url>
          <loc>https://plexusone.github.io/omni-google/releases/v0.4.0/</loc>
-         <lastmod>2026-05-03</lastmod>
+         <lastmod>2026-06-14</lastmod>
+    </url>
+    <url>
+         <loc>https://plexusone.github.io/omni-google/releases/v0.5.0/</loc>
+         <lastmod>2026-06-14</lastmod>
     </url>
 </urlset>

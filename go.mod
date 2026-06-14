@@ -17,6 +17,8 @@ require (
 	google.golang.org/genai v1.58.0
 )
 
+require github.com/gorilla/websocket v1.5.3
+
 require (
 	cel.dev/expr v0.25.2 // indirect
 	cloud.google.com/go v0.123.0 // indirect
@@ -41,7 +43,6 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.16 // indirect
 	github.com/googleapis/gax-go/v2 v2.22.0 // indirect
-	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/grokify/mogo v0.74.5 // indirect
 	github.com/grokify/sogo v0.15.0 // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect

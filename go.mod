@@ -19,7 +19,7 @@ require (
 
 require (
 	github.com/gorilla/websocket v1.5.3
-	github.com/plexusone/omnivoice-core v0.0.0-00010101000000-000000000000
+	github.com/plexusone/omnivoice-core v0.12.1
 )
 
 require (
@@ -78,6 +78,3 @@ require (
 exclude google.golang.org/grpc/stats/opentelemetry v0.0.0-20240907200651-3ffb98b2c93a
 
 exclude google.golang.org/grpc/stats/opentelemetry v0.0.0-20241028142157-ada6787961b3
-
-// TODO: Remove before release - use local omnivoice-core for realtime package
-replace github.com/plexusone/omnivoice-core => /Users/johnwang/go/src/github.com/plexusone/omnivoice-core

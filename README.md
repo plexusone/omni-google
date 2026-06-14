@@ -36,6 +36,7 @@ Google Cloud providers for the OmniStorage, OmniLLM, and OmniChat ecosystems.
 | **omnillm** | `github.com/plexusone/omni-google/omnillm` | Gemini LLM provider for [omnillm-core](https://github.com/plexusone/omnillm-core) |
 | **omnistorage** | `github.com/plexusone/omni-google/omnistorage` | GCS and Drive backends for [omnistorage-core](https://github.com/plexusone/omnistorage-core) |
 | **omnichat** | `github.com/plexusone/omni-google/omnichat/gmail` | Gmail provider for [omnichat](https://github.com/plexusone/omnichat) |
+| **omnivoice** | `github.com/plexusone/omni-google/omnivoice` | Gemini Live API for real-time voice-to-voice |
 
 ## Installation
 
@@ -48,6 +49,9 @@ go get github.com/plexusone/omni-google/omnistorage
 
 # For Gmail messaging provider
 go get github.com/plexusone/omni-google/omnichat/gmail
+
+# For Gemini Live voice-to-voice
+go get github.com/plexusone/omni-google/omnivoice
 ```
 
 ---
@@ -303,6 +307,77 @@ router.Send(ctx, "gmail", "recipient@example.com", provider.OutgoingMessage{
 3. Download `client_secret.json`
 4. On first run, OAuth flow opens browser for authorization
 5. Token is cached to `~/.omnichat/gmail_token.json`
+
+---
+
+## OmniVoice - Gemini Live API
+
+The `omnivoice` module provides real-time voice-to-voice capabilities via the Gemini Live API.
+
+### Quick Start
+
+```go
+import (
+    "context"
+    "os"
+
+    "github.com/plexusone/omni-google/omnivoice"
+)
+
+func main() {
+    ctx := context.Background()
+
+    // Create Gemini Live provider
+    provider := omnivoice.NewRealtimeProvider(os.Getenv("GOOGLE_API_KEY"),
+        omnivoice.WithVoice("Puck"),
+        omnivoice.WithInstructions("You are a helpful assistant."),
+    )
+
+    // Stream audio in/out
+    audioIn := make(chan []byte, 100)
+    audioCh, transcriptCh, err := provider.ProcessAudioStream(ctx, audioIn, omnivoice.ProcessConfig{})
+    if err != nil {
+        panic(err)
+    }
+
+    // Send audio (PCM16 16kHz mono)
+    go func() {
+        for chunk := range microphoneAudio {
+            audioIn <- chunk
+        }
+        close(audioIn)
+    }()
+
+    // Receive audio (PCM16 24kHz mono) and transcripts
+    for {
+        select {
+        case audio := <-audioCh:
+            playAudio(audio.Audio)
+        case transcript := <-transcriptCh:
+            fmt.Printf("Transcript: %s\n", transcript.Text)
+        }
+    }
+}
+```
+
+### Available Voices
+
+| Voice | Description |
+|-------|-------------|
+| Puck | Upbeat, lively |
+| Charon | Informative, direct |
+| Kore | Firm, authoritative |
+| Fenrir | Enthusiastic, positive |
+| Aoede | Bright, clear |
+
+### Features
+
+- ✅ Real-time voice-to-voice (~200ms latency)
+- ✅ Function calling during conversation
+- ✅ Streaming audio input/output
+- ✅ Turn detection and interruptions
+- ✅ Google Search grounding
+- ✅ Code execution
 
 ---
 

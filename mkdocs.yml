@@ -49,6 +49,7 @@ nav:
       - OmniLLM (Gemini): omnillm/index.md
       - OmniStorage (GCS/Drive): omnistorage/index.md
       - OmniChat (Gmail): omnichat/index.md
+      - OmniVoice (Gemini Live): omnivoice/index.md
   - Releases:
       - releases/index.md
       - v0.4.0: releases/v0.4.0.md

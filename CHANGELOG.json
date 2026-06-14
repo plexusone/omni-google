@@ -6,6 +6,34 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.5.0",
+      "date": "2026-06-14",
+      "highlights": [
+        { "description": "Gemini Live API for native voice-to-voice with ~200ms latency" },
+        { "description": "Implements omnivoice-core `realtime.Provider` interface for gateway integration" }
+      ],
+      "added": [
+        { "description": "[omnivoice] Gemini Live API WebSocket client for real-time voice conversations", "commit": "eff0739" },
+        { "description": "[omnivoice] `RealtimeProvider` with `ProcessAudioStream` for voice-to-voice processing", "commit": "df0eb4b" },
+        { "description": "[omnivoice] All client/server event types per Gemini Live API specification", "commit": "eff0739" },
+        { "description": "[omnivoice] Configuration options: voice, instructions, tools, temperature", "commit": "eff0739" },
+        { "description": "[omnivoice] Function calling support with `OnFunctionCall` callback", "commit": "df0eb4b" },
+        { "description": "[omnivoice] Implement omnivoice-core `realtime.Provider` interface", "commit": "fd2d82f" },
+        { "description": "[omnivoice] `RealtimeProviderFactory` for gateway integration", "commit": "abc52e8" }
+      ],
+      "dependencies": [
+        { "description": "Add `github.com/gorilla/websocket` v1.5.3", "commit": "8916c26" },
+        { "description": "Add `github.com/plexusone/omnivoice-core` v0.12.1", "commit": "c6ae901" }
+      ],
+      "documentation": [
+        { "description": "Gemini Live API guide with quick start and integration examples", "commit": "b33dd3f" },
+        { "description": "README updated with omnivoice usage example", "commit": "f09522f" }
+      ],
+      "tests": [
+        { "description": "Unit tests for client, events, and provider", "commit": "726d503" }
+      ]
+    },
+    {
       "version": "v0.4.0",
       "date": "2026-05-03",
       "highlights": [

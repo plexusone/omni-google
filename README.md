@@ -360,6 +360,26 @@ func main() {
 }
 ```
 
+### Registry Integration
+
+Use omnivoice-core's provider registry for automatic discovery:
+
+```go
+import (
+    omnivoice "github.com/plexusone/omnivoice-core"
+    "github.com/plexusone/omnivoice-core/registry"
+    _ "github.com/plexusone/omni-google/omnivoice/realtime" // Auto-register
+)
+
+// Get realtime provider via registry
+provider, err := omnivoice.GetRealtimeProvider("gemini",
+    registry.WithAPIKey(os.Getenv("GOOGLE_API_KEY")),
+    registry.WithModel("gemini-2.0-flash-live"),
+    registry.WithVoice("Puck"),
+    registry.WithInstructions("You are a helpful assistant."),
+)
+```
+
 ### Available Voices
 
 | Voice | Description |

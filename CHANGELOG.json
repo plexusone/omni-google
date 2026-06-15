@@ -6,6 +6,25 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.6.0",
+      "date": "2026-06-15",
+      "highlights": [
+        { "description": "Registry integration with omnivoice-core for automatic Gemini Live provider discovery" },
+        { "description": "Type-safe registry options for provider-specific configuration" }
+      ],
+      "added": [
+        { "description": "[omnivoice] Registry integration with omnivoice-core via side-effect imports", "commit": "1541316" },
+        { "description": "[omnivoice] Type-safe registry options (`WithRegistryTools`, `WithRegistryFunctions`, `WithRegistryResponseModalities`)", "commit": "b13229f" },
+        { "description": "[omnivoice] Registry options for generation parameters (`WithRegistryTemperature`, `WithRegistryTopP`, `WithRegistryTopK`, `WithRegistryMaxOutputTokens`)", "commit": "b13229f" },
+        { "description": "[omnivoice] Registry options for features (`WithRegistryGoogleSearch`, `WithRegistryCodeExecution`)", "commit": "b13229f" },
+        { "description": "[omnivoice] Enhanced factory with typed extension handling", "commit": "f105bdd" },
+        { "description": "[omnivoice] `Provider()` method on wrapper for accessing underlying Gemini realtime provider", "commit": "f105bdd" }
+      ],
+      "dependencies": [
+        { "description": "`github.com/plexusone/omnivoice-core` v0.12.1 → v0.14.0", "commit": "1b62bf3" }
+      ]
+    },
+    {
       "version": "v0.5.0",
       "date": "2026-06-14",
       "highlights": [

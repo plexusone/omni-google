@@ -29,6 +29,35 @@ func NewRealtimeProviderFromConfig(cfg registry.ProviderConfig) (registry.Realti
 		opts = append(opts, WithInstructions(v))
 	}
 
+	// Type-safe extensions
+	if v, ok := cfg.Extensions["tools"].([]ToolDef); ok {
+		opts = append(opts, WithTools(v...))
+	}
+	if v, ok := cfg.Extensions["functions"].([]FunctionDeclaration); ok {
+		opts = append(opts, WithFunctions(v...))
+	}
+	if v, ok := cfg.Extensions["responseModalities"].([]string); ok {
+		opts = append(opts, WithResponseModalities(v...))
+	}
+	if v, ok := cfg.Extensions["temperature"].(float64); ok {
+		opts = append(opts, WithTemperature(v))
+	}
+	if v, ok := cfg.Extensions["topP"].(float64); ok {
+		opts = append(opts, WithTopP(v))
+	}
+	if v, ok := cfg.Extensions["topK"].(int); ok {
+		opts = append(opts, WithTopK(v))
+	}
+	if v, ok := cfg.Extensions["maxOutputTokens"].(int); ok {
+		opts = append(opts, WithMaxOutputTokens(v))
+	}
+	if v, ok := cfg.Extensions["enableGoogleSearch"].(bool); ok && v {
+		opts = append(opts, WithGoogleSearch())
+	}
+	if v, ok := cfg.Extensions["enableCodeExecution"].(bool); ok && v {
+		opts = append(opts, WithCodeExecution())
+	}
+
 	provider := NewRealtimeProvider(cfg.APIKey, opts...)
 	return &realtimeWrapper{provider}, nil
 }

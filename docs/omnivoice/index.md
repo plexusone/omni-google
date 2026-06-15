@@ -105,6 +105,67 @@ audioCh, transcriptCh, err := provider.ProcessAudioStream(ctx, audioIn, realtime
 })
 ```
 
+## Registry Integration
+
+*Added in v0.6.0*
+
+Use the omnivoice-core registry for automatic provider discovery:
+
+```go
+import (
+    omnivoice "github.com/plexusone/omnivoice-core"
+    "github.com/plexusone/omnivoice-core/registry"
+    _ "github.com/plexusone/omni-google/omnivoice/realtime" // Auto-register
+)
+
+// Get realtime provider via registry
+provider, err := omnivoice.GetRealtimeProvider("gemini",
+    registry.WithAPIKey(os.Getenv("GOOGLE_API_KEY")),
+    registry.WithModel("gemini-2.0-flash-live"),
+    registry.WithVoice("Puck"),
+    registry.WithInstructions("You are a helpful assistant."),
+)
+if err != nil {
+    log.Fatal(err)
+}
+
+// Process audio streams
+audioCh, transcriptCh, err := provider.ProcessAudioStream(ctx, audioIn, nil)
+```
+
+### Type-Safe Registry Options
+
+Provider-specific options for Gemini Live configuration:
+
+```go
+import "github.com/plexusone/omni-google/omnivoice/realtime"
+
+provider, err := omnivoice.GetRealtimeProvider("gemini",
+    registry.WithAPIKey(os.Getenv("GOOGLE_API_KEY")),
+    // Type-safe Gemini-specific options
+    realtime.WithRegistryTools(tools),
+    realtime.WithRegistryFunctions(functions),
+    realtime.WithRegistryResponseModalities([]string{"AUDIO", "TEXT"}),
+    realtime.WithRegistryTemperature(0.7),
+    realtime.WithRegistryTopP(0.9),
+    realtime.WithRegistryTopK(40),
+    realtime.WithRegistryMaxOutputTokens(1024),
+    realtime.WithRegistryGoogleSearch(),    // Enable grounding
+    realtime.WithRegistryCodeExecution(),   // Enable code execution
+)
+```
+
+### Accessing Underlying Provider
+
+Access the underlying Gemini provider for full API access:
+
+```go
+wrapper := provider.(*realtime.RealtimeWrapper)
+geminiProvider := wrapper.Provider()
+
+// Use Gemini-specific methods
+```
+
 ## Configuration
 
 ### Client Options

@@ -22,6 +22,8 @@ require (
 	github.com/plexusone/omnivoice-core v0.12.1
 )
 
+replace github.com/plexusone/omnivoice-core => ../omnivoice-core
+
 require (
 	cel.dev/expr v0.25.2 // indirect
 	cloud.google.com/go v0.123.0 // indirect

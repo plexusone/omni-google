@@ -19,10 +19,8 @@ require (
 
 require (
 	github.com/gorilla/websocket v1.5.3
-	github.com/plexusone/omnivoice-core v0.12.1
+	github.com/plexusone/omnivoice-core v0.14.0
 )
-
-replace github.com/plexusone/omnivoice-core => ../omnivoice-core
 
 require (
 	cel.dev/expr v0.25.2 // indirect

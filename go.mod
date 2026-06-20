@@ -11,7 +11,7 @@ require (
 	github.com/plexusone/omnichat v0.8.0
 	// omnillm dependencies
 	github.com/plexusone/omnillm-core v0.17.0
-	github.com/plexusone/omnistorage-core v0.4.0
+	github.com/plexusone/omnistorage-core v0.5.0
 	golang.org/x/oauth2 v0.36.0
 	google.golang.org/api v0.285.0
 	google.golang.org/genai v1.61.0

@@ -108,8 +108,67 @@ for {
 | Streaming | Yes |
 | System Messages | Yes |
 | Multi-turn Conversations | Yes |
+| Reasoning/Thinking | Yes |
 | Tool Calling | Planned |
 | JSON Mode | Planned |
+
+## Reasoning and Thinking
+
+Gemini supports extended thinking via `ThinkingConfig` with `ThinkingLevel` and optional `ThinkingBudget`.
+
+### Using ReasoningEffort (Recommended)
+
+The unified `ReasoningEffort` field automatically maps to Gemini's thinking levels:
+
+```go
+import omnillm "github.com/plexusone/omnillm-core"
+
+effort := omnillm.ReasoningEffortHigh
+resp, err := client.CreateChatCompletion(ctx, &omnillm.ChatCompletionRequest{
+    Model:           "gemini-2.0-flash-thinking",
+    ReasoningEffort: &effort,
+    Messages: []omnillm.Message{
+        {Role: omnillm.RoleUser, Content: "Solve this complex problem..."},
+    },
+})
+```
+
+### Mapping Table
+
+| ReasoningEffort | Gemini ThinkingLevel |
+|-----------------|---------------------|
+| `"none"` | `MINIMAL` |
+| `"low"` | `LOW` |
+| `"medium"` | `MEDIUM` |
+| `"high"` | `HIGH` |
+
+### Using Anthropic-style Thinking
+
+If you use the `Thinking` field (Anthropic-style), it maps as follows:
+
+| ThinkingType | Gemini ThinkingLevel |
+|--------------|---------------------|
+| `"enabled"` | `HIGH` |
+| `"disabled"` | `MINIMAL` |
+| `"adaptive"` | `MEDIUM` |
+
+The `BudgetTokens` field maps to Gemini's `ThinkingBudget`.
+
+### Native Gemini ThinkingLevel Constants
+
+For direct Gemini usage, the provider exports these constants:
+
+```go
+import "github.com/plexusone/omni-google/omnillm"
+
+// Available constants
+gemini.ThinkingLevelMinimal // "MINIMAL"
+gemini.ThinkingLevelLow     // "LOW"
+gemini.ThinkingLevelMedium  // "MEDIUM"
+gemini.ThinkingLevelHigh    // "HIGH"
+```
+
+See the [Reasoning Feature Guide](https://github.com/plexusone/omnillm-core/blob/main/docs/features/reasoning.md) for cross-provider usage.
 
 ## Available Models
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"math"
 	"time"
 
 	"google.golang.org/genai"
@@ -64,8 +65,11 @@ func (c *Client) CreateCompletion(ctx context.Context, req *Request) (*Response,
 		return nil, fmt.Errorf("messages cannot be empty")
 	}
 
+	// Build generation config
+	config := c.buildGenerateContentConfig(req)
+
 	// Create a chat session
-	chat, err := c.client.Chats.Create(ctx, req.Model, nil, nil)
+	chat, err := c.client.Chats.Create(ctx, req.Model, config, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create chat: %w", err)
 	}
@@ -144,8 +148,11 @@ func (c *Client) CreateCompletionStream(ctx context.Context, req *Request) (*Str
 		return nil, fmt.Errorf("messages cannot be empty")
 	}
 
+	// Build generation config
+	config := c.buildGenerateContentConfig(req)
+
 	// Create a chat session
-	chat, err := c.client.Chats.Create(ctx, req.Model, nil, nil)
+	chat, err := c.client.Chats.Create(ctx, req.Model, config, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create chat: %w", err)
 	}
@@ -179,6 +186,45 @@ func (c *Client) CreateCompletionStream(ctx context.Context, req *Request) (*Str
 		model:     req.Model,
 		index:     0,
 	}, nil
+}
+
+// buildGenerateContentConfig builds genai.GenerateContentConfig from request
+func (c *Client) buildGenerateContentConfig(req *Request) *genai.GenerateContentConfig {
+	config := &genai.GenerateContentConfig{}
+
+	// Set thinking config if provided
+	if req.ThinkingConfig != nil {
+		thinkingConfig := &genai.ThinkingConfig{}
+		if req.ThinkingConfig.ThinkingLevel != nil {
+			thinkingConfig.ThinkingLevel = genai.ThinkingLevel(*req.ThinkingConfig.ThinkingLevel)
+		}
+		if req.ThinkingConfig.ThinkingBudget != nil {
+			thinkingConfig.ThinkingBudget = req.ThinkingConfig.ThinkingBudget
+		}
+		config.ThinkingConfig = thinkingConfig
+	}
+
+	// Set other generation parameters
+	if req.Temperature != nil {
+		temp := float32(*req.Temperature)
+		config.Temperature = &temp
+	}
+	if req.TopP != nil {
+		topP := float32(*req.TopP)
+		config.TopP = &topP
+	}
+	if req.TopK != nil {
+		topK := float32(*req.TopK)
+		config.TopK = &topK
+	}
+	if req.MaxTokens != nil {
+		config.MaxOutputTokens = int32(min(*req.MaxTokens, math.MaxInt32)) //nolint:gosec // bounds checked with min()
+	}
+	if len(req.Stop) > 0 {
+		config.StopSequences = req.Stop
+	}
+
+	return config
 }
 
 // Close closes the client

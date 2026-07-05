@@ -3,6 +3,7 @@ package gemini
 import (
 	"context"
 	"io"
+	"math"
 
 	omnillm "github.com/plexusone/omnillm-core"
 	"github.com/plexusone/omnillm-core/provider"
@@ -64,6 +65,9 @@ func (p *Provider) CreateChatCompletion(ctx context.Context, req *provider.ChatC
 			Type: req.ResponseFormat.Type,
 		}
 	}
+
+	// Convert thinking config from unified format
+	geminiReq.ThinkingConfig = p.convertThinkingConfig(req)
 
 	// Convert messages
 	for _, msg := range req.Messages {
@@ -128,6 +132,9 @@ func (p *Provider) CreateChatCompletionStream(ctx context.Context, req *provider
 		}
 	}
 
+	// Convert thinking config from unified format
+	geminiReq.ThinkingConfig = p.convertThinkingConfig(req)
+
 	// Convert messages
 	for _, msg := range req.Messages {
 		geminiReq.Messages = append(geminiReq.Messages, Message{
@@ -148,6 +155,54 @@ func (p *Provider) CreateChatCompletionStream(ctx context.Context, req *provider
 // Close closes the provider
 func (p *Provider) Close() error {
 	return p.client.Close()
+}
+
+// convertThinkingConfig converts unified ReasoningEffort/Thinking to Gemini ThinkingConfig
+func (p *Provider) convertThinkingConfig(req *provider.ChatCompletionRequest) *ThinkingConfig {
+	// Priority: explicit Thinking config > ReasoningEffort mapping
+	if req.Thinking != nil {
+		config := &ThinkingConfig{}
+		// Map Anthropic-style thinking type to Gemini thinking level
+		switch req.Thinking.Type {
+		case provider.ThinkingTypeEnabled:
+			level := ThinkingLevelHigh
+			config.ThinkingLevel = &level
+		case provider.ThinkingTypeDisabled:
+			level := ThinkingLevelMinimal
+			config.ThinkingLevel = &level
+		case provider.ThinkingTypeAdaptive:
+			level := ThinkingLevelMedium
+			config.ThinkingLevel = &level
+		}
+		if req.Thinking.BudgetTokens != nil {
+			budget := min(*req.Thinking.BudgetTokens, math.MaxInt32)
+			budget32 := int32(budget) //nolint:gosec // bounds checked with min()
+			config.ThinkingBudget = &budget32
+		}
+		return config
+	}
+
+	// Map OpenAI-style reasoning_effort to Gemini thinking level
+	if req.ReasoningEffort != nil {
+		config := &ThinkingConfig{}
+		switch *req.ReasoningEffort {
+		case provider.ReasoningEffortNone:
+			level := ThinkingLevelMinimal
+			config.ThinkingLevel = &level
+		case provider.ReasoningEffortLow:
+			level := ThinkingLevelLow
+			config.ThinkingLevel = &level
+		case provider.ReasoningEffortMedium:
+			level := ThinkingLevelMedium
+			config.ThinkingLevel = &level
+		case provider.ReasoningEffortHigh:
+			level := ThinkingLevelHigh
+			config.ThinkingLevel = &level
+		}
+		return config
+	}
+
+	return nil
 }
 
 // StreamAdapter adapts Gemini stream to unified interface

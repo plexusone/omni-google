@@ -15,7 +15,23 @@ type Request struct {
 	LogitBias        map[string]int  `json:"logit_bias,omitempty"`
 	User             *string         `json:"user,omitempty"`
 	ResponseFormat   *ResponseFormat `json:"response_format,omitempty"`
+	ThinkingConfig   *ThinkingConfig `json:"thinking_config,omitempty"`
 }
+
+// ThinkingConfig represents Gemini thinking/reasoning configuration
+type ThinkingConfig struct {
+	ThinkingLevel  *string `json:"thinking_level,omitempty"`  // Use ThinkingLevel* constants
+	ThinkingBudget *int32  `json:"thinking_budget,omitempty"` // Token budget for thinking
+}
+
+// ThinkingLevel constants for Gemini thinking configuration.
+// These map to genai.ThinkingLevel values.
+const (
+	ThinkingLevelMinimal = "MINIMAL" // Minimal thinking (maps from ReasoningEffortNone)
+	ThinkingLevelLow     = "LOW"     // Low thinking effort
+	ThinkingLevelMedium  = "MEDIUM"  // Medium thinking effort
+	ThinkingLevelHigh    = "HIGH"    // High thinking effort (maps from ReasoningEffortHigh)
+)
 
 // ResponseFormat specifies the format of the response
 type ResponseFormat struct {

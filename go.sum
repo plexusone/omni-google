@@ -81,8 +81,8 @@ github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10 h1:GFCKgm
 github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10/go.mod h1:t/avpk3KcrXxUnYOhZhMXJlSEyie6gQbtLq5NM3loB8=
 github.com/plexusone/omnichat v0.8.0 h1:PZofl+lWVMtOUurzULxwcHrl6fjvEMwvsvd5a+tCQMM=
 github.com/plexusone/omnichat v0.8.0/go.mod h1:bHZN8Yqbb7wTbnHNe/0zVmvlxLEw1tGUsjlbRWzAHyo=
-github.com/plexusone/omnillm-core v0.17.0 h1:mzM1yVt7sSFxHqNmyhoV6GxYsqfFOD/m1tWyv2qFpec=
-github.com/plexusone/omnillm-core v0.17.0/go.mod h1:180U/oa67fly3+T3h1sL/pBMvcjIKR+bvSEkAGnalMY=
+github.com/plexusone/omnillm-core v0.18.0 h1:JnONiIe08W+83hsyxyFHSouk0jkBY2o7/SzvJxF3mYI=
+github.com/plexusone/omnillm-core v0.18.0/go.mod h1:180U/oa67fly3+T3h1sL/pBMvcjIKR+bvSEkAGnalMY=
 github.com/plexusone/omnistorage-core v0.5.0 h1:gORFoef2hysWTbn2/ndWoAQFsL0PRG6pSxNvTdAnPMI=
 github.com/plexusone/omnistorage-core v0.5.0/go.mod h1:YIUrTHj75Z8lSSRE/4ZaLF+DZvLQJGC2OU0ctjPfg8Y=
 github.com/plexusone/omnivoice-core v0.15.0 h1:lvzucRbP53bwzBhbZ/x15iRUfJexJqzEeLJvXo74GRM=

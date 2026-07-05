@@ -6,6 +6,31 @@
   "commitConvention": "conventional",
   "releases": [
     {
+      "version": "v0.7.0",
+      "date": "2026-07-05",
+      "highlights": [
+        { "description": "**Thinking Configuration**: Native Gemini thinking level support with ThinkingConfig" },
+        { "description": "**Cross-Provider Reasoning**: ReasoningEffort and ThinkingType mapping to Gemini levels" }
+      ],
+      "added": [
+        { "description": "[omnillm] `ThinkingConfig` type with `ThinkingLevel` and `ThinkingBudget` fields", "commit": "fcc696f" },
+        { "description": "[omnillm] `ThinkingLevel` constants: MINIMAL, LOW, MEDIUM, HIGH", "commit": "fcc696f" },
+        { "description": "[omnillm] `convertThinkingConfig` for unified format to Gemini mapping", "commit": "fcc696f" },
+        { "description": "[omnillm] `buildGenerateContentConfig` for generation parameters", "commit": "fcc696f" },
+        { "description": "[omnillm] `ReasoningEffort` to `ThinkingLevel` mapping", "commit": "fcc696f" },
+        { "description": "[omnillm] Anthropic `ThinkingType` to Gemini `ThinkingLevel` mapping", "commit": "fcc696f" }
+      ],
+      "tests": [
+        { "description": "[omnillm] Unit tests for thinking config conversion and mapping", "commit": "cb64c6b" }
+      ],
+      "documentation": [
+        { "description": "[omnillm] Thinking configuration section with examples", "commit": "8d5b8e1" }
+      ],
+      "dependencies": [
+        { "description": "`github.com/plexusone/omnillm-core` v0.17.0 → v0.18.0", "commit": "8c31d5f" }
+      ]
+    },
+    {
       "version": "v0.6.0",
       "date": "2026-06-15",
       "highlights": [
